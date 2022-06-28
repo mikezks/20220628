@@ -1,10 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import {Component, OnInit, Optional} from '@angular/core';
 import {FlightService} from '@flight-workspace/flight-lib';
 
 @Component({
   selector: 'flight-search',
   templateUrl: './flight-search.component.html',
-  styleUrls: ['./flight-search.component.css']
+  styleUrls: ['./flight-search.component.css'],
+  providers: [
+    /* {
+      provide: FlightService,
+      useFactory: (http: HttpClient) => new FlightService(http),
+      deps: [HttpClient]
+    } */
+  ]
 })
 export class FlightSearchComponent implements OnInit {
 
@@ -23,7 +31,7 @@ export class FlightSearchComponent implements OnInit {
   };
 
   constructor(
-    private flightService: FlightService) {
+    /* @Optional()  */private flightService: FlightService) {
   }
 
   ngOnInit() {
