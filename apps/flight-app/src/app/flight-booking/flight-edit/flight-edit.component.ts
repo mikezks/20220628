@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectRouteParams } from '../../+state';
 import { validateCity } from '../../shared/validators/city-validator';
 
 @Component({
@@ -15,7 +17,8 @@ export class FlightEditComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private fb: FormBuilder) {}
+    private fb: FormBuilder,
+    private store: Store) {}
 
   ngOnInit() {
     this.route.params.subscribe((p) => {
@@ -28,6 +31,8 @@ export class FlightEditComponent implements OnInit {
     });
 
     this.editForm.valueChanges.subscribe(console.log);
+
+    this.store.select(selectRouteParams).subscribe(console.log);
   }
 
   getEditFormMetadata(): FormGroup {
