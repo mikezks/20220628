@@ -1,6 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import {Component, OnInit, Optional} from '@angular/core';
-import {FlightService} from '@flight-workspace/flight-lib';
+import {Flight, FlightService} from '@flight-workspace/flight-lib';
+import { Store } from '@ngrx/store';
+import { Observable, take } from 'rxjs';
+import { flightsLoaded } from '../+state/flight-booking.actions';
+import { FlightBookingRootState } from '../+state/flight-booking.reducer';
 
 @Component({
   selector: 'flight-search',
@@ -19,10 +23,7 @@ export class FlightSearchComponent implements OnInit {
   from = 'Hamburg'; // in Germany
   to = 'Graz'; // in Austria
   urgent = false;
-
-  get flights() {
-    return this.flightService.flights;
-  }
+  flights$: Observable<Flight[]> = this.store.select(state => state.flightBooking.flights);
 
   // "shopping basket" with selected flights
   basket: { [id: number]: boolean } = {
@@ -31,7 +32,8 @@ export class FlightSearchComponent implements OnInit {
   };
 
   constructor(
-    /* @Optional()  */private flightService: FlightService) {
+    /* @Optional()  */private flightService: FlightService,
+    private store: Store<FlightBookingRootState>) {
   }
 
   ngOnInit() {
@@ -42,7 +44,14 @@ export class FlightSearchComponent implements OnInit {
     if (!this.from || !this.to) return;
 
     this.flightService
-      .load(this.from, this.to, this.urgent);
+      .find(this.from, this.to, this.urgent).pipe(
+        take(1)
+      )
+      .subscribe(
+        flights => this.store.dispatch(
+          flightsLoaded({ flights })
+        )
+      );
   }
 
   delay(): void {
