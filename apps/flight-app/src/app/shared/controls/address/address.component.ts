@@ -5,7 +5,7 @@ import { ControlValueAccessor, FormBuilder, FormGroup, NgControl } from '@angula
 
 export interface Address {
   street: string;
-  number: number[];
+  number: string;
   zip: string;
   city: string;
   country: string;
