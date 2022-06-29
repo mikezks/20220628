@@ -1,21 +1,13 @@
-import { HttpClient } from '@angular/common/http';
-import {Component, OnInit, Optional} from '@angular/core';
-import {Flight, FlightService} from '@flight-workspace/flight-lib';
+import { Component, OnInit } from '@angular/core';
+import { Flight } from '@flight-workspace/flight-lib';
 import { Store } from '@ngrx/store';
-import { Observable, take } from 'rxjs';
+import { Observable } from 'rxjs';
 import * as fromFlightBooking from '../+state';
 
 @Component({
   selector: 'flight-search',
   templateUrl: './flight-search.component.html',
-  styleUrls: ['./flight-search.component.css'],
-  providers: [
-    /* {
-      provide: FlightService,
-      useFactory: (http: HttpClient) => new FlightService(http),
-      deps: [HttpClient]
-    } */
-  ]
+  styleUrls: ['./flight-search.component.css']
 })
 export class FlightSearchComponent implements OnInit {
 
@@ -30,9 +22,7 @@ export class FlightSearchComponent implements OnInit {
     5: true
   };
 
-  constructor(
-    /* @Optional()  */private flightService: FlightService,
-    private store: Store<fromFlightBooking.FlightBookingRootState>) {
+  constructor(private store: Store<fromFlightBooking.FlightBookingRootState>) {
   }
 
   ngOnInit() {
@@ -42,15 +32,13 @@ export class FlightSearchComponent implements OnInit {
   search(): void {
     if (!this.from || !this.to) return;
 
-    this.flightService
-      .find(this.from, this.to, this.urgent).pipe(
-        take(1)
-      )
-      .subscribe(
-        flights => this.store.dispatch(
-          fromFlightBooking.flightsLoaded({ flights })
-        )
-      );
+    this.store.dispatch(
+      fromFlightBooking.flightsLoad({
+        from: this.from,
+        to: this.to,
+        urgent: this.urgent
+      })
+    );
   }
 
   delay(flight: Flight): void {
