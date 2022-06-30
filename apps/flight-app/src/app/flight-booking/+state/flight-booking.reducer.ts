@@ -48,6 +48,8 @@ export const reducer = createReducer(
       flight => flight.id === action.flight.id ? action.flight : flight
     );
     return { ...state, flights };
+    /* state.flights[0].date = action.flight.date;
+    return state; */
   }),
 
 );

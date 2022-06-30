@@ -9,6 +9,9 @@
   <div class="content">
     <p>Flight-No.: #{{ item.id }}</p>
     <p>Date: {{ item.date | date: 'long' }}</p>
+    <p>
+      <ng-content></ng-content>
+    </p>
 
     <p>
       <button class="btn btn-default" *ngIf="!selected" (click)="select()">
@@ -27,3 +30,5 @@
     </p>
   </div>
 </div>
+
+{{ blink() }}
