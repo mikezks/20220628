@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Flight } from '@flight-workspace/flight-lib';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -12,6 +12,7 @@ import * as fromFlightBooking from '../+state';
 export class FlightSearchComponent implements OnInit {
 
   from = 'Hamburg'; // in Germany
+  fromLabel = 'From:'
   to = 'Graz'; // in Austria
   urgent = false;
   flights$ = this.store.select(fromFlightBooking.selectActiveUserFlights);
@@ -22,11 +23,20 @@ export class FlightSearchComponent implements OnInit {
     5: true
   };
 
-  constructor(private store: Store) {
+  constructor(
+    private store: Store,
+    private cdRef: ChangeDetectorRef) {
+
+    /* setInterval(() => {
+      this.cdRef.markForCheck();
+    }, 3_000) */
   }
 
   ngOnInit() {
     console.log('ngOnInit');
+    setTimeout(() =>
+      this.fromLabel = 'Startflughafen:'
+    , 2_000);
   }
 
   search(): void {
